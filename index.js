@@ -9,6 +9,7 @@ var log = require('debug-log')('register-agent')
 var detector = require('cloud-detector')
 
 function detectAndUpdate() {
+  console.log('detecting')
   detector((err, cloud, meta) => {
     //if (err) return log(err)
     log(cloud, meta)
