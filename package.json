@@ -1,0 +1,13 @@
+{
+  "name": "register-agent",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:taghubnet/register-agent.git",
+  "author": "Asbjørn Enge <asbjorn@hanafjedle.net>",
+  "license": "MIT",
+  "dependencies": {
+    "cloud-detector": "^1.0.3",
+    "debug-log": "^1.0.1",
+    "minimist": "^1.2.0"
+  }
+}
