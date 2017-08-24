@@ -6,8 +6,9 @@
   "author": "Asbjørn Enge <asbjorn@hanafjedle.net>",
   "license": "MIT",
   "dependencies": {
-    "cloud-detector": "^1.0.3",
+    "cloud-detector": "^2.0.0",
     "debug-log": "^1.0.1",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "request": "^2.81.0"
   }
 }
