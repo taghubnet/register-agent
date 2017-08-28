@@ -19,6 +19,7 @@ function detectAndUpdate() {
   detector(function(err, cloud) {
     if (err) return log(err)
     if (cloud === 'unknown') return log('Unable to detect cloud')
+    log('cloud', cloud)
     let payload = Object.assign(
       {
         hostname: hostname,
@@ -32,7 +33,7 @@ function detectAndUpdate() {
         }
       }
     )
-    console.log(payload, cloud)
+    log('payload', payload)
     request({
       url: `http://${args.register_api_host}:${args.register_api_port}/`,
       method: 'POST',
@@ -40,7 +41,7 @@ function detectAndUpdate() {
     }, (err, res, rpayload) => {
       if (err) return log(err)
       if (res.statusCode != 200) return log(req.statusCode, req.message)
-      console.log('get_token_req', rpayload)   
+      log('REQ: Get token payload', rpayload)   
       request({
         url: `http://${args.docker_host}:${args.docker_port}/swarm/join`,
         method: 'POST',
@@ -52,8 +53,8 @@ function detectAndUpdate() {
         }
       }, (err, res, rrpayload) => {
         if (err) return log(err)
-        if (res.statusCode != 200) return log(req.statusCode, req.message)
-        console.log('join_swarm_req', rrpayload)   
+        if (res.statusCode != 200) return log(res.statusCode, rrpayload)
+        log('Swarm joined, exiting...')
         process.exit(0)
       })
     }) 
