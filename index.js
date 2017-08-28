@@ -32,14 +32,30 @@ function detectAndUpdate() {
         }
       }
     )
-    console.log(payload)
+    console.log(payload, cloud)
     request({
       url: `http://${args.register_api_host}:${args.register_api_port}/`,
       method: 'POST',
       json: payload
-    }, (err, req, rpayload) => {
+    }, (err, res, rpayload) => {
       if (err) return log(err)
-      console.log(rpayload)      
+      if (res.statusCode != 200) return log(req.statusCode, req.message)
+      console.log('get_token_req', rpayload)   
+      request({
+        url: `http://${args.docker_host}:${args.docker_port}/swarm/join`,
+        method: 'POST',
+        json: {
+          ListenAddr: "zt0:2377",
+          AdvertiseAddr: "zt0:2377",
+          RemoteAddrs: [`${args.register_api_host}:2377`],
+          JoinToken: rpayload.token
+        }
+      }, (err, res, rrpayload) => {
+        if (err) return log(err)
+        if (res.statusCode != 200) return log(req.statusCode, req.message)
+        console.log('join_swarm_req', rrpayload)   
+        process.exit(0)
+      })
     }) 
   })
 }
