@@ -19,26 +19,27 @@ function detectAndUpdate() {
   detector(function(err, cloud) {
     if (err) return log(err)
     if (cloud === 'unknown') return log('Unable to detect cloud')
-    let labels = Object.assign
+    let payload = Object.assign(
+      {
+        hostname: hostname,
+        type: args.type
+      }, 
+      {
+        labels: {
+          cloud: cloud.cloud,
+          zone: cloud.zone,
+          ...cloud.labels
+        }
+      }
+    )
+    console.log(payload)
     request({
       url: `http://${args.register_api_host}:${args.register_api_port}/`,
       method: 'POST',
-      json: Object.assign(
-        {
-          hostname: hostname,
-          type: type
-        }, 
-        {
-          labels: {
-            cloud: cloud.cloud,
-            zone: cloud.zone,
-            ...cloud.labels
-          }
-        }
-      )
-    }, (err, req, payload) => {
+      json: payload
+    }, (err, req, rpayload) => {
       if (err) return log(err)
-      console.log(payload)      
+      console.log(rpayload)      
     }) 
   })
 }
