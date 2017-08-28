@@ -1,7 +1,8 @@
-FROM node:8
-RUN mkdir /app
-ADD index.js /app/index.js
-ADD package.json /app/package.json
-WORKDIR /app
-RUN yarn install
-ENTRYPOINT ["node","/app/index.js"]
+FROM alpine:3.6
+RUN apk add --no-cache \
+    g++ \
+    libstdc++ \
+  && apk del --purge \
+    g++
+ADD index /register-agent
+ENTRYPOINT ["/register-agent"]

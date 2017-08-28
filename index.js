@@ -26,11 +26,10 @@ function detectAndUpdate() {
         type: args.type
       }, 
       {
-        labels: {
+        labels: Object.assign({
           cloud: cloud.cloud,
           zone: cloud.zone,
-          ...cloud.labels
-        }
+        }, cloud.labels)
       }
     )
     log('payload', payload)
