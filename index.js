@@ -53,7 +53,7 @@ function detectAndUpdate() {
         }
       }, (err, res, rrpayload) => {
         if (err) return log(err)
-        if (res.statusCode != 200) return log(res.statusCode, rrpayload)
+        if (res.statusCode != 200) log(res.statusCode, rrpayload)
         log('Swarm joined, exiting...')
         process.exit(0)
       })
