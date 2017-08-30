@@ -12,6 +12,7 @@ var args = require('minimist')(process.argv.slice(2), {
 var log = require('debug-log')('register-agent')
 var detector = require('cloud-detector')
 var request = require('request')
+var get = require('get-value')
 var hostname = require('os').hostname()
 
 function detectAndUpdate() {
@@ -23,7 +24,7 @@ function detectAndUpdate() {
     let payload = Object.assign(
       {
         hostname: hostname,
-        type: cloud.swarmtype || args.type
+        type: get(cloud, 'labels.swarmtype') || args.type
       }, 
       {
         labels: Object.assign({
