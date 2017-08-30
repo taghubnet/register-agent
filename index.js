@@ -23,7 +23,7 @@ function detectAndUpdate() {
     let payload = Object.assign(
       {
         hostname: hostname,
-        type: args.type
+        type: cloud.swarmtype || args.type
       }, 
       {
         labels: Object.assign({
