@@ -1,8 +1,8 @@
 var args = require('minimist')(process.argv.slice(2), {
   default: {
-    detectImmediately: true,
+    detectImmediately: false,
     detectInterval: 10000,
-    register_api_host: '172.0.0.1',
+    register_api_host: '127.0.0.1',
     register_api_port: '3210',
     docker_host: '127.0.0.1',
     docker_port: '4243',
