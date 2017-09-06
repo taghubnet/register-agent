@@ -6,6 +6,7 @@ var args = require('minimist')(process.argv.slice(2), {
     register_api_port: '3210',
     docker_host: '127.0.0.1',
     docker_port: '4243',
+    retries: '2',
     type: 'worker'
   }
 })
@@ -14,12 +15,16 @@ var detector = require('cloud-detector')
 var request = require('request')
 var get = require('get-value')
 var hostname = require('os').hostname()
+var retries = 0
 
 function detectAndUpdate() {
   log('Detecting...')
   detector(function(err, cloud) {
-    if (err) return log(err)
-    if (cloud === 'unknown') return log('Unable to detect cloud')
+    if (err) {
+      retries++
+      if (retries < args.retries) return log(err)
+      cloud = { cloud: 'unknown', zone: 'unknown', labels: {} }
+    }
     log('cloud', cloud)
     let payload = Object.assign(
       {
