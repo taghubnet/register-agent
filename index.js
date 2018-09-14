@@ -10,6 +10,7 @@ var args = require('minimist')(process.argv.slice(2), {
     type: 'worker'
   }
 })
+var os = require('os')
 var log = require('debug-log')('register-agent')
 var detector = require('cloud-detector')
 var request = require('request')
@@ -18,6 +19,14 @@ var hostname = require('os').hostname()
 var retries = 0
 
 function detectAndUpdate() {
+  log('Finding ZT interface')
+  log(os.getNetworkInterfaces())
+  var zt_interfaces = Object.keys(os.getNetworkInterfaces()).filter(i => i.indexOf('zt') === 0)
+  var interface = args.interface || zt_interfaces.length > 0 ? zt_interfaces[0] : null
+  if (!interface) {
+    log('No ZT interface found')
+    process.exit(1)
+  }
   log('Detecting...')
   detector(function(err, cloud) {
     if (err) {
@@ -51,8 +60,8 @@ function detectAndUpdate() {
         url: `http://${args.docker_host}:${args.docker_port}/swarm/join`,
         method: 'POST',
         json: {
-          ListenAddr: "zt0:2377",
-          AdvertiseAddr: "zt0:2377",
+          ListenAddr: `${interface}:2377`,
+          AdvertiseAddr: `${interface}:2377`,
           RemoteAddrs: [`${args.register_api_host}:2377`],
           JoinToken: rpayload.token
         }
