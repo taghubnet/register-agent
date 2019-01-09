@@ -6,7 +6,7 @@ var args = require('minimist')(process.argv.slice(2), {
     register_api_port: '3210',
     docker_host: '127.0.0.1',
     docker_port: '4243',
-    retries: '2',
+    retries: 5,
     type: 'worker'
   }
 })
@@ -24,7 +24,8 @@ function detectAndUpdate() {
   var zt_interfaces = Object.keys(os.getNetworkInterfaces()).filter(i => i.indexOf('zt') === 0)
   var interface = args.interface || zt_interfaces.length > 0 ? zt_interfaces[0] : null
   if (!interface) {
-    log('No ZT interface found')
+    retries++
+    if (retries < args.retries) return log('No ZT interface found')
     process.exit(1)
   }
   log('Detecting...')
