@@ -1,15 +1,16 @@
 {
   "name": "register-agent",
-  "version": "2.2.4",
+  "version": "2.4.0",
   "main": "index.js",
   "repository": "git@github.com:taghubnet/register-agent.git",
   "author": "Asbjørn Enge <asbjorn@hanafjedle.net>",
   "license": "MIT",
   "scripts": {
-    "build": "pkg index.js --target node8-alpine-x64"
+    "build": "pkg index.js --target node16-alpine-x64"
   },
   "dependencies": {
     "cloud-detector": "^2.0.0",
+    "debug": "^4.3.3",
     "debug-log": "^1.0.1",
     "get-value": "^2.0.6",
     "minimist": "^1.2.0",
