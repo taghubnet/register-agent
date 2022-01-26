@@ -67,9 +67,6 @@ else {
   log("Running without TLS")
 }
 
-
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
-
 function detectAndUpdate() {
 
   log('Finding ZT interface')
