@@ -168,7 +168,7 @@ function detectAndUpdate() {
 process.on('uncaughtException', log)
 
 //sleep to allow time for andromeda-authz-plugin to start
-sleep(ars.startDelay)
+sleep(args.startDelay)
 
 if (args.detectImmediately) detectAndUpdate()
 setInterval(detectAndUpdate, args.detectInterval)
