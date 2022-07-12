@@ -8,7 +8,8 @@ var args = require('minimist')(process.argv.slice(2), {
     docker_port: '4243',
     retries: 5,
     type: 'worker',
-    secretpath: '/run/secrets'
+    secretpath: '/run/secrets',
+    startDelay: 60000
   }
 })
 var os = require('os')
@@ -165,6 +166,9 @@ function detectAndUpdate() {
 }
 
 process.on('uncaughtException', log)
+
+//sleep to allow time for andromeda-authz-plugin to start
+sleep(ars.startDelay)
 
 if (args.detectImmediately) detectAndUpdate()
 setInterval(detectAndUpdate, args.detectInterval)
