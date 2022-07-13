@@ -8,8 +8,7 @@ var args = require('minimist')(process.argv.slice(2), {
     docker_port: '4243',
     retries: 5,
     type: 'worker',
-    secretpath: '/run/secrets',
-    startDelay: 60000
+    secretpath: '/run/secrets'
   }
 })
 var os = require('os')
@@ -158,17 +157,16 @@ function detectAndUpdate() {
           log(rrpayload) 
           log(res.message)
         }
-        log('Swarm joined, exiting...')
-        process.exit(0)
+        else {
+          log('Swarm joined, exiting...')
+          process.exit(0)
+        }
       })
     }) 
   })
 }
 
 process.on('uncaughtException', log)
-
-//sleep to allow time for andromeda-authz-plugin to start
-sleep(args.startDelay)
 
 if (args.detectImmediately) detectAndUpdate()
 setInterval(detectAndUpdate, args.detectInterval)
