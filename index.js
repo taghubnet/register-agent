@@ -154,7 +154,7 @@ function detectAndUpdate() {
           return log(err)
         }
         let r = new RegExp("This node is already part of a swarm")
-        if (res.statusCode != 200 && !r.test(res.message)) {
+        if (res.statusCode != 200 && !r.test(rrpayload)) {
           log(rrpayload) 
           log(res.message)
           log("Not success, retrying...")
