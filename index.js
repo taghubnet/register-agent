@@ -1,4 +1,3 @@
-import os from 'os'
 import minimist from 'minimist'
 import {
   log,
