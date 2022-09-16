@@ -1,10 +1,12 @@
 import os from 'os'
 import fs from 'fs'
+import path from 'path'
+import https from 'https'
 import fetch from 'node-fetch'
 import detector from 'cloud-detector'
 
 export function https_agent_maybe(tls, cert) {
-  tls ? 
+  return tls ? 
   {
     agent: new https.Agent({
       ca: cert?.tlsCA, 
@@ -68,9 +70,9 @@ export function load_certificates_maybe(args, state) {
       secrets = fs.readdirSync(secretpath)
     }
     try {
-      state.cert.tlsCert = fs.readFileSync(path.join(secretpath, secrets.find(e => e.match("client-cert.pem"))))
-      state.cert.tlsKey = fs.readFileSync(path.join(secretpath, secrets.find(e => e.match("client-key.pem"))))
-      state.cert.tlsCA = fs.readFileSync(path.join(secretpath, secrets.find(e => e.match("ca.pem"))))
+      state.cert.tlsCert = fs.readFileSync(path.join(secretpath, secrets.find(e => e.match("client-cert.pem")))).toString()
+      state.cert.tlsKey = fs.readFileSync(path.join(secretpath, secrets.find(e => e.match("client-key.pem")))).toString()
+      state.cert.tlsCA = fs.readFileSync(path.join(secretpath, secrets.find(e => e.match("ca.pem")))).toString()
       state.tls = true
     } catch(err) {
       console.log(err)
