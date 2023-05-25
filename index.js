@@ -46,7 +46,7 @@ async function detectAndUpdate() {
   log(`Found cloud environment: ${cloud?.cloud}`)
 
   log('Registering with agent')
-  const agent_response = await register_with_agent(args, cloud)
+  const agent_response = await register_with_agent(args, cloud, address)
   log('Successfully registered with agent.')
 
   log('Joining swarm')

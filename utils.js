@@ -84,7 +84,7 @@ export function load_certificates_maybe(args, state) {
   }
 }
 
-export async function register_with_agent(args, cloud) {
+export async function register_with_agent(args, cloud, zt_ip) {
   const agent_response = await fetch(`http://${args.register_api_host}:${args.register_api_port}/`, {
     headers: { 'Content-Type': 'application/json' },
     method: 'POST',
@@ -93,7 +93,8 @@ export async function register_with_agent(args, cloud) {
       type: cloud?.labels?.swarmtype || args?.type,
       labels: Object.assign({
         zone: cloud?.zone,
-        cloud: cloud?.cloud
+        cloud: cloud?.cloud,
+        zt: zt_ip
       }, cloud?.labels)
     }),
   })
