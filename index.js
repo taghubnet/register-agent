@@ -5,7 +5,8 @@ import {
   join_docker_swarm,
   register_with_agent,
   find_zerotier_address,
-  load_certificates_maybe
+  load_certificates_maybe,
+  find_not_zerotier_address
 } from './utils.js'
 
 const args = minimist(process.argv.slice(2), {
@@ -19,6 +20,7 @@ const args = minimist(process.argv.slice(2), {
     register_api_host: '127.0.0.1',
     register_api_port: '3210',
     swarm_listen_address: '2377',
+    use_zt_network: false
   }
 })
 console.log(args)
@@ -37,7 +39,7 @@ load_certificates_maybe(args, state)
 
 async function detectAndUpdate() {
   log('Finding ZT interface')
-  const address = find_zerotier_address(args)
+  let address = find_zerotier_address(args)
   log(`Found ZT interface: ${address}`)
 
   log('Detecting cloud environment...')
@@ -46,11 +48,18 @@ async function detectAndUpdate() {
   log(`Found cloud environment: ${cloud?.cloud}`)
 
   log('Registering with agent')
+  
   const agent_response = await register_with_agent(args, cloud, address)
   log('Successfully registered with agent.')
 
   log('Joining swarm')
-  await join_docker_swarm(args, state, address, agent_response?.token) 
+  if (args.use_zt_network) {
+    await join_docker_swarm(args, state, address, agent_response?.token)
+  }  
+  else {
+    await join_docker_swarm(args, state, find_not_zerotier_address, agent_response?.token) 
+  }
+  
   log('Swarm joined. Exiting...')
   process.exit(0)
 }

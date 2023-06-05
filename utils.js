@@ -34,13 +34,29 @@ export function sleep(ms) {
 export function find_zerotier_address(args) {
   const network_interfaces = os.networkInterfaces()
   const zt_interfaces = Object.keys(network_interfaces).filter(i => i.indexOf('zt') === 0)
-  const iface = args.interface || zt_interfaces.length > 0 ? zt_interfaces[0] : null
+  const iface = args?.interface || zt_interfaces.length > 0 ? zt_interfaces[0] : null
   if (!iface) throw new Error('No zt interface found')
   const address = Object.keys(network_interfaces).reduce((addr,name) => {
     if (addr) return addr
     const nets = network_interfaces[name]
     const net = nets.reduce((__net, _net) => {
       if (_net.family === 'IPv4' && !_net.internal && name === iface) return _net
+      return __net
+    }, null) 
+    return net?.address
+  }, null)
+  if (!address) throw new Error('Unable to parse address')
+  return address
+}
+
+export function find_not_zerotier_address(args) {
+  const network_interfaces = os.networkInterfaces()
+  const zt_interfaces = Object.keys(network_interfaces).filter(i => i.indexOf('zt') !== 0)  
+  const address = Object.keys(network_interfaces).reduce((addr,name) => {
+    if (addr) return addr
+    const nets = network_interfaces[name]
+    const net = nets.reduce((__net, _net) => {
+      if (_net.family === 'IPv4' && !_net.internal) return _net
       return __net
     }, null) 
     return net?.address
