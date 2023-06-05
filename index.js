@@ -57,7 +57,7 @@ async function detectAndUpdate() {
     await join_docker_swarm(args, state, address, agent_response?.token)
   }  
   else {
-    await join_docker_swarm(args, state, find_not_zerotier_address, agent_response?.token) 
+    await join_docker_swarm(args, state, find_not_zerotier_address(), agent_response?.token) 
   }
   
   log('Swarm joined. Exiting...')
